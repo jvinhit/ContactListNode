@@ -13,4 +13,21 @@ myApp.controller( 'AppCtrl',function($scope,$http){
 			refresh();
 		});
 	};
+	$scope.remove = function(id){
+		console.log('remove ' + id);
+		$http.delete('/contactlist/'+id).success(function(response){
+			refresh();
+		});
+	};
+	$scope.edit = function(id){
+		$http.get('/contactlist/'+id).success(function(response){
+			$scope.contact = response;
+		});
+	};
+	$scope.update = function(){
+		var id = $scope.contact._id;
+		$http.put('/contactlist/'+id, $scope.contact).success(function(response){
+			refresh();
+		});
+	};
 });

@@ -21,5 +21,35 @@ app.post('/contactlist', function(req, res){
 		res.json(docs);
 	});
 });
+app.delete('/contactlist/:id', function(req, res){
+	var id = req.params.id;
+	console.log('node server listen delete contact with id :' + id);
+	db.contactlist.remove({_id:mongojs.ObjectId(id)}, function(err,docs){
+		res.json(docs);
+	});
+});
+
+app.get('/contactlist/:id', function(req, res){
+	var id = req.params.id;
+	console.log('edit contact with id : ' + id);
+	db.contactlist.findOne({_id: mongojs.ObjectId(id)} , function(err, docs){
+		res.json(docs);
+	});
+});
+app.put('/contactlist/:uid', function(req, res){
+	var id = req.params.uid;
+	db.contactlist.findAndModify({query:{_id:mongojs.ObjectId(id)}, 
+		update:{
+			$set:{
+				name:  req.body.name,
+				email:req.body.email,
+				number: req.body.number
+			}
+		},
+		new : true
+	}, function(err, docs){
+		res.json(docs);
+	});
+});
 app.listen(3000);	
 console.log("jserver is running");
