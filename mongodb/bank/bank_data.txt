@@ -1,0 +1,97 @@
+show dbs
+show collections
+
+
+<<mongoimport --jsonArray --db test --collection bank_data < C:\Users\jvinh\Desktop\mongodb-mva-master\module2_getting_started\bank_data.json\bank_data.json>>
+
+- db.bank_data.count() -> số dòng của collection hiện tại 
+- db.bank_data.findOne() -> lấy dòng đầu tiên
+	{
+	        "_id" : ObjectId("5749dc912d11cd6df6dd4661"),
+	        "first_name" : "JAMES",
+	        "last_name" : "SMITH",
+	        "accounts" : [
+	                {
+	                        "account_type" : "Savings",
+	                        "account_balance" : 8995952.153640702,
+	                        "currency" : "PESO"
+	                },
+	                {
+	                        "account_type" : "Checking",
+	                        "account_balance" : 3901436.5580737568,
+	                        "currency" : "USD"
+	                }
+	        ]
+	}
+
+
+- db.bank_data.find({"_id" : ObjectId("5749dc912d11cd6df6dd4661")});
+- db.bank_data.find({"_id" : ObjectId("5749dc912d11cd6df6dd4661")}).cont();
+ nếu nhiều object co id : 
+- db.bank_data.find({"_id" : ObjectId("5749dc912d11cd6df6dd4661")})[0];
+
+-db.bank_data.find({last_name:"SMITH"})
+-db.bank_data.find({last_name:"SMITH"}).count()
+- db.bank_data.find({last_name:"SMITH"})[2] -> lấy ra thằng có index =2
+
+
+- db.bank_data.find({last_name:"SMITH"},{first_name:1}) -> lấy cột id + firstName
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4661"), "first_name" : "JAMES" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4662"), "first_name" : "ROBERT" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4663"), "first_name" : "JOHN" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4664"), "first_name" : "WILLIAM" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4665"), "first_name" : "MICHAEL" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4666"), "first_name" : "DAVID" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4667"), "first_name" : "RICHARD" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4668"), "first_name" : "CHARLES" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4669"), "first_name" : "THOMAS" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466a"), "first_name" : "JOSEPH" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466b"), "first_name" : "DANIEL" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466c"), "first_name" : "CHRISTOPHER" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466d"), "first_name" : "PAUL" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466e"), "first_name" : "DONALD" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd466f"), "first_name" : "MARK" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4670"), "first_name" : "KENNETH" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4671"), "first_name" : "EDWARD" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4672"), "first_name" : "BRIAN" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4673"), "first_name" : "RONALD" }
+{ "_id" : ObjectId("5749dc912d11cd6df6dd4674"), "first_name" : "GEORGE" }
+
+- db.bank_data.find({last_name:"SMITH"},{first_name:1, "_id":0}) -> lay cot firstName an cot id 
+{ "first_name" : "JAMES" }
+{ "first_name" : "ROBERT" }
+{ "first_name" : "JOHN" }
+{ "first_name" : "WILLIAM" }
+{ "first_name" : "MICHAEL" }
+{ "first_name" : "DAVID" }
+{ "first_name" : "RICHARD" }
+{ "first_name" : "CHARLES" }
+{ "first_name" : "THOMAS" }
+{ "first_name" : "JOSEPH" }
+{ "first_name" : "DANIEL" }
+{ "first_name" : "CHRISTOPHER" }
+{ "first_name" : "PAUL" }
+{ "first_name" : "DONALD" }
+{ "first_name" : "MARK" }
+{ "first_name" : "KENNETH" }
+{ "first_name" : "EDWARD" }
+{ "first_name" : "BRIAN" }
+{ "first_name" : "RONALD" }
+{ "first_name" : "GEORGE" }
+
+
+- var smithPerson = db.bank_data.find({last_name:"SMITH"},{first_name:1});
+ for (var i = 0 ; i < smithPerson.count(); i++){
+print(smithPerson[i].first_name);
+
+ }
+
+*tìm với account balance : 
+var sp = db.bank_data.find({"accounts.account_balance":8995952.153640702}) // tim ra acc co gia tri nhu nay 
+
+var sp = db.bank_data.find({"accounts.account_balance":2819063.8844904397}, {'accounts.$':1 }) // chỉ chiếu ra fields accounts với accountBalance có giá trị = 2819063.8844904397
+
+var sp = db.bank_data.find({"accounts.account_balance":2819063.8844904397}, {'accounts.$':1 , first_name:!}) // chỉ chiếu ra fields accounts , và first_name với accountBalance có giá trị = 2819063.8844904397
+
+AND & OR Queries: 
+db.bank_data.find({last_name: "SMITH", first_name: "JAMES"})
